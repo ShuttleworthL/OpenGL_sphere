@@ -22,15 +22,17 @@ def draw_sphere(): #defining a opengl display function
         next_phi = math.pi * (i + 1) / vertex_count_lng #step angle for next vertex down
         for j in range (vertex_count_lat): #iterating through horozontal lines
             theta = 2*(math.pi) * (j/vertex_count_lat) #angle of horozontal steps for any given vertex count by dividing vertex percentage multiplyer by radians in circle
-            next_theta = 2 * math.pi * (j + 1) / vertex_count_lat #step angle for next vertex across)
+            next_theta = 2 * math.pi * (j + 1) / vertex_count_lat #step angle for next vertex across
 
             #(v0)----(v1)
             # |       |
             # |       |
             #(v2)----(v3)
 
-            # Vertices of the quad
+            #vertices of the quad
             #open gl can only render lines points and triangle sos the quad neds to be broken down into 2 triangles
+
+            #covert polar verticies to cartesian co ordiantes
             v0 = (cx + radius * math.cos(theta) * math.sin(phi),
                 cy + radius * math.sin(theta) * math.sin(phi),
                 cz + radius * math.cos(phi))
