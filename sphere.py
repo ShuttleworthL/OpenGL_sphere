@@ -3,8 +3,8 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import math
 
-vertex_count_lat = 50 #vertical lines
-vertex_count_lng = 50 #horozontal lines
+vertex_count_lat = 25 #vertical lines
+vertex_count_lng = 25 #horozontal lines
 radius = 0.7 #row of sphere
 #offsets for spheres position
 cx = 0
@@ -33,11 +33,11 @@ def draw_sphere(): #defining a opengl display function
             #open gl can only render lines points and triangle sos the quad neds to be broken down into 2 triangles
 
             #covert polar verticies to cartesian co ordiantes
-            v0 = (cx + radius * math.cos(theta) * math.sin(phi),
-                cy + radius * math.sin(theta) * math.sin(phi),
-                cz + radius * math.cos(phi))
+            v0 = (cx + radius * math.cos(theta) * math.sin(phi), #finding opposite side (width wize length) using cos(on xy plane) while additionally multiplying by sin(phi) (proportion between hypot and opposite side on z plane - scales radius with polar angle) +offsets
+                cy + radius * math.sin(theta) * math.sin(phi), #finding adjacent side (depth wize length) using sin(on xy plane) while additionally multiplying by sin(phi) (proportion between hypot and opposite side on z plane - scales radius with polar angle) +offsets
+                cz + radius * math.cos(phi)) #finding adjacent side (height length) using cos(on z plane) +offsets
             
-            v1 = (cx + radius * math.cos(next_theta) * math.sin(phi),
+            v1 = (cx + radius * math.cos(next_theta) * math.sin(phi), #repeated steps for further angle increments to form all four verticies in grid pattern - to later construct into 2 triangles
                 cy + radius * math.sin(next_theta) * math.sin(phi),
                 cz + radius * math.cos(phi))
             
@@ -49,7 +49,7 @@ def draw_sphere(): #defining a opengl display function
                 cy + radius * math.sin(next_theta) * math.sin(next_phi),
                 cz + radius * math.cos(next_phi))
             
-            glBegin(GL_TRIANGLES) #every 3 vertices onward = 1 triangle
+            glBegin(GL_TRIANGLES) #every 3 vertices stated past this declaration form 1 triangle
 
             # triangle 1
             glVertex3f(*v0) #unpacking x, y and z for each vertex
@@ -67,8 +67,8 @@ def draw_sphere(): #defining a opengl display function
 
     glColor3f(0.0, 0.0, 0.0)
 
-    # latitude lines
-    for i in range(vertex_count_lng):
+    #latitude lines
+    for i in range(vertex_count_lng): #uses same math for fidnign phi and theta increments and converting polar to cartesian co ordinates but instead has each vertice added to a wireframe loop (repeated below for longtitude)
         phi = math.pi * (i / vertex_count_lng)
         glBegin(GL_LINE_LOOP)
         for j in range(vertex_count_lat):
@@ -79,7 +79,7 @@ def draw_sphere(): #defining a opengl display function
             glVertex3f(x, y, z)
         glEnd()
 
-    # longitude lines
+    #longitude lines
     for j in range(vertex_count_lat):
         theta = 2 * math.pi * (j / vertex_count_lat)
         glBegin(GL_LINE_LOOP)
@@ -95,7 +95,7 @@ def draw_sphere(): #defining a opengl display function
 
 glutInit() #initializes GLUT
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH) #condigures window behaviour eg colour format
-glutInitWindowSize(600, 600) #sets initial window size
+glutInitWindowSize(1200, 1200) #sets initial window size
 glutCreateWindow(b"Solid Sphere") #creates window
 glutDisplayFunc(draw_sphere) #calls function when window needs to be drawn
 glutMainLoop() #starts event loop
